@@ -1,0 +1,67 @@
+services:
+  # ==========================================================
+  # 1. Banco de Dados - PostgreSQL
+  # ==========================================================
+  db:
+    image: postgres:15-alpine
+    container_name: database_app
+    restart: always
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: myapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  # ==========================================================
+  # 2. Backend - Node.js / Express
+  # ==========================================================
+  backend:
+    build: ./backend
+    container_name: agenda_backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/usr/src/app
+    command: npm run dev
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # ==========================================================
+  # 3. Frontend - React / Vite / Next.js
+  # ==========================================================
+  frontend:
+    build: ./frontend
+    container_name: agenda_frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/usr/src/app
+    command: npm run dev
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+# ==========================================================
+# 4. Volumes persistentes
+# ==========================================================
+volumes:
+  postgres_data:
+
+# ==========================================================
+# 5. Rede interna de comunicação
+# ==========================================================
+networks:
+  app_network:
+    driver: bridge

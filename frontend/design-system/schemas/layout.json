@@ -1,0 +1,24 @@
+{
+  "header": {
+    "logo": "/assets/logo-agenda-facil.svg",
+    "nav_links": [
+      { "label": "Funcionalidades", "href": "#features" },
+      { "label": "Planos", "href": "#planos" },
+      { "label": "FAQ", "href": "#faq" },
+      { "label": "Entrar", "href": "/login" }
+    ],
+    "cta_button": {
+      "label": "Criar Conta",
+      "href": "/signup",
+      "variant": "primary"
+    }
+  },
+  "sections": [
+    { "id": "hero", "component": "HeroSection" },
+    { "id": "social-proof", "component": "TestimonialsCarousel" },
+    { "id": "features", "component": "FeatureHighlights" },
+    { "id": "demo-video", "component": "DemoSection" },
+    { "id": "pricing", "component": "PricingSection" },
+    { "id": "faq", "component": "FAQSection" }
+  ]
+}

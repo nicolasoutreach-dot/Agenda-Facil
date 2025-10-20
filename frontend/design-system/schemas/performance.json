@@ -1,0 +1,13 @@
+{
+  "performance_targets": {
+    "time_to_interactive_ms": 3000,
+    "largest_contentful_paint_ms": 2500,
+    "uptime_target": 99.9,
+    "failure_rate_max": 0.5
+  },
+  "web_vitals_thresholds": {
+    "LCP": "<=2.5s",
+    "FID": "<=100ms",
+    "CLS": "<=0.1"
+  }
+}

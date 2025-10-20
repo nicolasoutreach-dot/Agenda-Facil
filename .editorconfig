@@ -1,0 +1,50 @@
+root = true
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+// frontend/.prettierrc (dentro do diretório frontend/)
+{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "arrowParens": "always"
+}
+// frontend/.eslintrc.js (dentro do diretório frontend/)
+module.exports = {
+  env: { browser: true, es2021: true, node: true },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier'
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: { ecmaFeatures: { jsx: true }, ecmaVersion: 12, sourceType: 'module' },
+  plugins: ['react', '@typescript-eslint', 'react-hooks'],
+  rules: { 'react/react-in-jsx-scope': 'off' },
+  settings: { react: { version: 'detect' } },
+};
+// backend/.eslintrc.js (dentro do diretório backend/)
+module.exports = {
+  env: { es2021: true, node: true },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: { ecmaVersion: 12, sourceType: 'module' },
+  plugins: ['@typescript-eslint', 'node'],
+  rules: {
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'no-unused-vars': 'off',
+    // Ignora variáveis de requisição comuns para evitar warnings em handlers
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_|req|res|next' }],
+  },
+};

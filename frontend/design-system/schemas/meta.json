@@ -1,0 +1,7 @@
+{
+  "project": "Agenda Fácil",
+  "version": "1.0.0",
+  "pilares": ["Simplicidade Poderosa", "Inteligência Acionável", "Ecossistema Aberto"],
+  "description": "Landing Page institucional construída para o MVP da Agenda Fácil. Integra com backend Node/Express e Prisma para captação de leads e métricas de ativação.",
+  "author": "Equipe de Produto Agenda Fácil"
+}

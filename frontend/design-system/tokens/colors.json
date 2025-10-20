@@ -1,0 +1,14 @@
+{
+  "primary": "#2563eb",
+  "primary_light": "#3b82f6",
+  "secondary": "#10b981",
+  "neutral": {
+    "100": "#ffffff",
+    "200": "#f8fafc",
+    "800": "#1f2937"
+  },
+  "accent": {
+    "warning": "#f59e0b",
+    "success": "#16a34a"
+  }
+}

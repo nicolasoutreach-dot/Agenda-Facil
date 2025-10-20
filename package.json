@@ -1,0 +1,17 @@
+{
+  "name": "agenda-facil",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "backend:dev": "npm run dev --workspace backend",
+    "backend:test": "npm test --workspace backend",
+    "backend:prisma:generate": "npm run prisma:generate --workspace backend",
+    "backend:prisma:migrate": "npm run prisma:migrate --workspace backend",
+    "backend:prisma:seed": "npm run prisma:seed --workspace backend",
+    "frontend:dev": "npm run dev --workspace frontend",
+    "frontend:build": "npm run build --workspace frontend",
+    "frontend:test": "npm test --workspace frontend",
+    "lint": "npm run lint --workspace frontend",
+    "format": "npm run format --workspace frontend"
+  }
+}

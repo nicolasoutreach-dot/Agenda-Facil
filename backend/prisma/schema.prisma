@@ -1,0 +1,294 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://prisly.cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: User (Agenda Fácil)
+// ----------------------------------------------------
+model User {
+  // O ID sera uma string universal e nao sequencial (cuid), uma boa pratica [5]
+  id                   String              @id @default(cuid())
+  email                String              @unique // Garante que o email seja unico [5]
+  name                 String
+  password             String // Onde o hash da senha sera armazenado
+  phone                String?             @unique
+  timezone             String              @default("America/Sao_Paulo")
+  nomeDoNegocio        String?             @map("nome_do_negocio")
+  servicos             String[]            @default([])
+  horarios             Json?               @map("horarios")
+  politicaConfirmacao  PoliticaConfirmacao @default(manual) @map("politica_confirmacao")
+  onboardingIncompleto Boolean             @default(true) @map("onboarding_incompleto")
+  customers            Customer[]
+  services             Service[]
+  appointments         Appointment[]
+  workingHours         WorkingHours[]
+  blocks               Block[]
+  paymentRecords       PaymentRecord[]
+
+  // Timestamps padroes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  refreshTokens       RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+  magicLinkTokens     MagicLinkToken[]
+  otpTokens           OtpToken[]
+}
+
+enum PoliticaConfirmacao {
+  manual
+  automatica
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: Customer (CRM basico)
+// ----------------------------------------------------
+model Customer {
+  id           String          @id @default(cuid())
+  providerId   String          @map("provider_id")
+  provider     User            @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  name         String
+  email        String?
+  phone        String?
+  notes        String?
+  tags         String[]        @default([])
+  createdAt    DateTime        @default(now()) @map("created_at")
+  updatedAt    DateTime        @updatedAt @map("updated_at")
+  appointments Appointment[]
+  payments     PaymentRecord[]
+
+  @@unique([providerId, email], map: "uniq_customer_email_per_provider")
+  @@index([providerId], map: "idx_customer_provider")
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: Service (Servicos ofertados)
+// ----------------------------------------------------
+model Service {
+  id              String        @id @default(cuid())
+  providerId      String        @map("provider_id")
+  provider        User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  durationMinutes Int           @map("duration_minutes") // duracao em minutos
+  price           Decimal?      @db.Decimal(10, 2)
+  currency        String        @default("BRL")
+  isActive        Boolean       @default(true) @map("is_active")
+  bufferBefore    Int           @default(0) @map("buffer_before") // minutos antes
+  bufferAfter     Int           @default(0) @map("buffer_after") // minutos depois
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  appointments    Appointment[]
+
+  @@unique([providerId, name], map: "uniq_service_name_per_provider")
+  @@index([providerId], map: "idx_service_provider")
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: Appointment (agendamentos)
+// ----------------------------------------------------
+model Appointment {
+  id         String            @id @default(cuid())
+  providerId String            @map("provider_id")
+  provider   User              @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  customerId String?           @map("customer_id")
+  customer   Customer?         @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  serviceId  String?           @map("service_id")
+  service    Service?          @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  startsAt   DateTime          @map("starts_at")
+  endsAt     DateTime          @map("ends_at")
+  status     AppointmentStatus @default(pending)
+  price      Decimal?          @db.Decimal(10, 2)
+  currency   String            @default("BRL")
+  source     AppointmentSource @default(manual)
+  notes      String?
+  metadata   Json?
+  createdAt  DateTime          @default(now()) @map("created_at")
+  updatedAt  DateTime          @updatedAt @map("updated_at")
+  payments   PaymentRecord[]
+
+  @@index([providerId], map: "idx_appointment_provider")
+  @@index([providerId, startsAt], map: "idx_appointment_provider_start")
+  @@index([customerId], map: "idx_appointment_customer")
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: WorkingHours (horario comercial)
+// ----------------------------------------------------
+model WorkingHours {
+  id           String   @id @default(cuid())
+  providerId   String   @map("provider_id")
+  provider     User     @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  dayOfWeek    Weekday  @map("day_of_week")
+  startMinutes Int      @map("start_minutes") // minutos desde 00:00
+  endMinutes   Int      @map("end_minutes") // minutos desde 00:00
+  breakWindows Json?    @map("break_windows") // estrutura flexivel para intervalos
+  timeZone     String?  @map("time_zone")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([providerId, dayOfWeek], map: "uniq_working_hours_day")
+  @@index([providerId], map: "idx_working_hours_provider")
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: Block (bloqueios da agenda)
+// ----------------------------------------------------
+model Block {
+  id         String    @id @default(cuid())
+  providerId String    @map("provider_id")
+  provider   User      @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  startsAt   DateTime  @map("starts_at")
+  endsAt     DateTime  @map("ends_at")
+  reason     String?
+  type       BlockType @default(manual)
+  metadata   Json?
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@index([providerId], map: "idx_block_provider")
+  @@index([providerId, startsAt, endsAt], map: "idx_block_timerange")
+}
+
+// ----------------------------------------------------
+// MODELO DE DADOS: PaymentRecord (entradas de caixa)
+// ----------------------------------------------------
+model PaymentRecord {
+  id            String        @id @default(cuid())
+  providerId    String        @map("provider_id")
+  provider      User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  appointmentId String?       @map("appointment_id")
+  appointment   Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  customerId    String?       @map("customer_id")
+  customer      Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  amount        Decimal       @db.Decimal(12, 2)
+  currency      String        @default("BRL")
+  method        PaymentMethod @default(pix)
+  status        PaymentStatus @default(received)
+  description   String?
+  recordedAt    DateTime      @default(now()) @map("recorded_at")
+  receivedAt    DateTime?     @map("received_at")
+  metadata      Json?
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@index([providerId], map: "idx_payment_provider")
+  @@index([appointmentId], map: "idx_payment_appointment")
+  @@index([customerId], map: "idx_payment_customer")
+}
+
+enum AppointmentStatus {
+  pending
+  confirmed
+  completed
+  cancelled
+  no_show
+}
+
+enum AppointmentSource {
+  manual
+  online
+  imported
+  integration
+}
+
+enum Weekday {
+  sunday
+  monday
+  tuesday
+  wednesday
+  thursday
+  friday
+  saturday
+}
+
+enum BlockType {
+  manual
+  lunch
+  maintenance
+  holiday
+  other
+}
+
+enum PaymentMethod {
+  pix
+  cash
+  credit_card
+  debit_card
+  transfer
+  voucher
+  other
+}
+
+enum PaymentStatus {
+  pending
+  received
+  refunded
+  cancelled
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model MagicLinkToken {
+  id         String    @id @default(cuid())
+  token      String    @unique
+  email      String
+  redirectTo String?
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([email])
+  @@index([userId])
+}
+
+model OtpToken {
+  id        String    @id @default(cuid())
+  code      String
+  email     String
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@unique([email, code])
+  @@index([email])
+  @@index([userId])
+}

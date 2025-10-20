@@ -1,0 +1,222 @@
+{
+  "meta": {
+    "project": "Agenda Fácil",
+    "version": "1.0.0",
+    "author": "Equipe Produto Agenda Fácil",
+    "framework": "Next.js 14 / React 18",
+    "description": "Landing Page institucional baseada nos pilares Simplicidade Poderosa, Inteligência Acionável e Ecossistema Aberto."
+  },
+  "design_tokens": {
+    "colors": {
+      "primary": "#2563eb",
+      "primary_light": "#3b82f6",
+      "secondary": "#10b981",
+      "neutral_100": "#ffffff",
+      "neutral_200": "#f8fafc",
+      "neutral_800": "#1f2937",
+      "accent_warning": "#f59e0b",
+      "accent_success": "#16a34a"
+    },
+    "typography": {
+      "font_family": "Inter, sans-serif",
+      "h1": { "size": "2.5rem", "weight": "700", "line_height": "1.2" },
+      "h2": { "size": "2rem", "weight": "600", "line_height": "1.3" },
+      "h3": { "size": "1.5rem", "weight": "600", "line_height": "1.4" },
+      "body": { "size": "1rem", "weight": "400", "line_height": "1.6" },
+      "cta": { "size": "1.125rem", "weight": "600", "letter_spacing": "0.02em" }
+    },
+    "spacing": {
+      "xs": "0.5rem",
+      "sm": "1rem",
+      "md": "2rem",
+      "lg": "4rem"
+    },
+    "breakpoints": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px"
+    },
+    "shadows": {
+      "card": "0 2px 8px rgba(0,0,0,0.08)",
+      "hover": "0 4px 14px rgba(0,0,0,0.12)"
+    },
+    "border_radius": {
+      "sm": "6px",
+      "md": "12px",
+      "lg": "20px"
+    }
+  },
+  "layout": {
+    "header": {
+      "logo": "/assets/logo-agenda-facil.svg",
+      "nav_links": [
+        { "label": "Funcionalidades", "href": "#funcionalidades" },
+        { "label": "Planos", "href": "#planos" },
+        { "label": "FAQ", "href": "#faq" },
+        { "label": "Entrar", "href": "/login" }
+      ],
+      "cta_button": {
+        "label": "Criar Conta",
+        "href": "/signup",
+        "variant": "primary"
+      }
+    },
+    "hero": {
+      "title": "Agenda Fácil: Simplicidade poderosa para crescer.",
+      "subtitle": "O sistema operacional definitivo para seu negócio de serviços — agendamentos impecáveis sem pagar comissões por cliente.",
+      "primary_cta": {
+        "label": "Criar conta GRÁTIS em 30 segundos",
+        "href": "/signup",
+        "variant": "primary"
+      },
+      "secondary_cta": {
+        "label": "Ver demonstração ao vivo",
+        "href": "#demo",
+        "variant": "outline"
+      },
+      "metrics": [
+        { "label": "Tempo médio de agendamento", "value": "54s" },
+        { "label": "Confiabilidade operacional", "value": "99.5%" },
+        { "label": "Cancelamentos por falha", "value": "<0.5%" }
+      ]
+    },
+    "social_proof": {
+      "title": "Microempreendedores de serviços confiam no Agenda Fácil",
+      "testimonials": [
+        {
+          "name": "Larissa Alves",
+          "role": "Designer de Sobrancelhas (MEI)",
+          "quote": "Troquei um marketplace caro pelo Agenda Fácil. Meus clientes agendam pelo WhatsApp e minhas faltas caíram pela metade.",
+          "avatar": "/assets/avatars/larissa.png"
+        },
+        {
+          "name": "João Felipe",
+          "role": "Barbeiro Independente",
+          "quote": "O alerta de clientes em risco e a otimização da agenda trouxeram semanas cheias novamente. Sem comissões!",
+          "avatar": "/assets/avatars/joao.png"
+        },
+        {
+          "name": "Camila Duarte",
+          "role": "Estética e Bem-estar",
+          "quote": "Criei minha conta em minutos. O painel é direto e meu time se adaptou sem treinamento.",
+          "avatar": "/assets/avatars/camila.png"
+        }
+      ],
+      "layout": "carousel",
+      "auto_play": true
+    },
+    "how_it_works": {
+      "title": "Seu cliente agenda em 3 cliques (e sem app!)",
+      "steps": [
+        {
+          "number": 1,
+          "title": "Escolha do Serviço",
+          "description": "Selecione o serviço desejado em um único toque.",
+          "icon": "🧾"
+        },
+        {
+          "number": 2,
+          "title": "Profissional e Data/Hora",
+          "description": "Veja horários livres em tempo real (<200ms).",
+          "icon": "⏰"
+        },
+        {
+          "number": 3,
+          "title": "Confirmação via WhatsApp",
+          "description": "Finalize com dados mínimos e receba confirmação instantânea.",
+          "icon": "💬"
+        }
+      ],
+      "cta": {
+        "label": "Comece a agendar agora gratuitamente",
+        "href": "/signup",
+        "variant": "primary"
+      }
+    },
+    "pillars": {
+      "title": "Simplicidade Poderosa. Inteligência Acionável. Ecossistema Aberto.",
+      "cards": [
+        {
+          "title": "Simplicidade Poderosa",
+          "description": "Funcionalidades que geram 95% do valor com o mínimo de cliques.",
+          "icon": "⚡"
+        },
+        {
+          "title": "Inteligência Acionável",
+          "description": "Alertas automáticos e otimização de agenda baseada em dados.",
+          "icon": "📈"
+        },
+        {
+          "title": "Ecossistema Aberto",
+          "description": "Integração livre com gateways como Stripe, Pagar.me e PagSeguro.",
+          "icon": "🔗"
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Planos que crescem com você",
+      "plans": [
+        {
+          "name": "Autônomo (Gratuito)",
+          "price": "R$ 0/mês",
+          "features": [
+            "Agendamento ilimitado",
+            "Link web otimizado para WhatsApp",
+            "Sem comissões por cliente"
+          ],
+          "cta": { "label": "Criar conta grátis", "href": "/signup", "variant": "primary" }
+        },
+        {
+          "name": "Crescimento (Plus)",
+          "price": "R$ sob consulta",
+          "features": [
+            "Tudo do Autônomo",
+            "Alertas de clientes em risco (churn)",
+            "Otimização de agenda inteligente",
+            "Taxa fixa por equipe"
+          ],
+          "cta": { "label": "Experimentar recursos Plus", "href": "/signup?plan=plus", "variant": "secondary" }
+        }
+      ]
+    },
+    "faq": {
+      "title": "Perguntas Frequentes",
+      "items": [
+        {
+          "question": "Precisa baixar app?",
+          "answer": "Não. Tudo funciona via link web otimizado para WhatsApp."
+        },
+        {
+          "question": "Cobra comissão por agendamento?",
+          "answer": "Jamais! A Agenda Fácil nunca cobra comissões por cliente."
+        },
+        {
+          "question": "Posso usar meu gateway de pagamento?",
+          "answer": "Sim. Liberdade total para usar Stripe, Pagar.me ou PagSeguro."
+        }
+      ]
+    },
+    "footer": {
+      "links": [
+        { "label": "Política de Privacidade", "href": "/privacidade" },
+        { "label": "Termos de Uso", "href": "/termos" },
+        { "label": "Suporte", "href": "https://support.agendafacil.io" }
+      ],
+      "social": [
+        { "platform": "whatsapp", "href": "https://wa.me/5541999999999" },
+        { "platform": "linkedin", "href": "https://linkedin.com/company/agendafacil" }
+      ],
+      "brand": {
+        "logo": "/assets/logo-footer.svg",
+        "tagline": "Seu Negócio, Sua Marca, Seu Sucesso."
+      }
+    }
+  },
+  "performance_targets": {
+    "time_to_interactive": "≤3000ms",
+    "largest_contentful_paint": "≤2500ms",
+    "uptime_target": "≥99.9%",
+    "failure_rate": "<0.5%"
+  }
+}
