@@ -182,5 +182,5 @@ PR com descrição objetiva e checklist de testes manuais (Swagger).
 Padronização: tipagem, Pydantic/SQLAlchemy 2.0, commit messages claras.
 
 Licença
-
+.
 A definir.
