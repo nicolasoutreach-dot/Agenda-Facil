@@ -1,5 +1,5 @@
 # MVP Backend – Fase 1
-
+docker compose up -d --build
 Minimal FastAPI + SQLAlchemy + Celery skeleton to cover:
 - Users (signup/login JWT)
 - Availability (simple slots)
@@ -9,6 +9,7 @@ Minimal FastAPI + SQLAlchemy + Celery skeleton to cover:
 
 ## Quick start (Dev)
 ```bash
+
 # 1) copy .env.example to .env and adjust
 cp .env.example .env
 
